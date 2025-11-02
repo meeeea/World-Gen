@@ -26,7 +26,10 @@ class Vec2: IConvertible
         return $"({Math.Round(x, 5)}, {Math.Round(y, 5)})";
     }   
 
-
+    public static double Magnitude(double scaleX, double scaleY)
+    {
+        return Math.Sqrt(scaleX * scaleX + scaleY * scaleY);
+    }
 
 
 // after here is ICONVERTER stuff and therefor unnecisary

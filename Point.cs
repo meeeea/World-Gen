@@ -5,9 +5,15 @@ class Point: IConvertible
     public int value;
     public static implicit operator int(Point point) => point.value;
     public static implicit operator Color(Point point) => Color.FromArgb(point.value, point.value, point.value);
+    public static implicit operator float(Point point) => (float) point.value / (float) 255;
     public Point()
     {
         value = Rand.Random(0, 255);
+    }
+
+    public Point(double height)
+    {
+        value = (int) Math.Floor(255 * height);
     }
 
     public override string ToString()
