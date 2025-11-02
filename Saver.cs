@@ -3,7 +3,7 @@ using System.Drawing.Printing;
 
 class Saver
 {
-    public static bool PointHashMapToImage<T>(HashMap<T> hashMap) where T : IConvertible, new()
+    public static bool DrawHashmap<T>(HashMap<T> hashMap) where T : IConvertible, new()
     {
         try
         {

@@ -1,7 +1,7 @@
 ﻿void main()
 {
     HashMap<Point> hashMap = new HashMap<Point>();
-    Saver.PointHashMapToImage(hashMap);
+    Saver.DrawHashmap(hashMap);
 }
 
 main();
