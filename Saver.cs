@@ -3,7 +3,7 @@ using System.Drawing.Printing;
 
 class Saver
 {
-    public static bool DrawHashmap<T>(HashMap<T> hashMap) where T : IConvertible, new()
+    public static bool DrawHashmap<T>(HashMap<T> hashMap, string fileName = "output") where T : IConvertible, new()
     {
         try
         {
@@ -23,7 +23,7 @@ class Saver
             }
 
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
-            output.Save("./Outputs/ouput.png", System.Drawing.Imaging.ImageFormat.Png);
+            output.Save($"./Outputs/{fileName}.png", System.Drawing.Imaging.ImageFormat.Png);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
         }
         catch (Exception E)
@@ -38,36 +38,39 @@ class Saver
         return true;
     }
 
-    public static bool LinearInterpolationHashMap(HashMap<Point> hashMap, int scaleX, int scaleY)
+    public static bool LinearInterpolationHashMap(HashMap<Point> hashMap, int scaleX, int scaleY, string fileName = "output")
     {
-        try
-        {
+        //try
+        //{
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
             Bitmap output = new Bitmap(scaleX, scaleY);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
+            int width = hashMap.Width;
+            int heigth = hashMap.Height;
 
             for (int i = 0; i < scaleX; i++)
             {
                 for (int k = 0; k < scaleY; k++)
                 {
-                    Color hue = (Color)Interpolator.LinearPoint(hashMap, i * hashMap.Width / scaleX, k * hashMap.Height / scaleY);
+                    Color hue = (Color)Interpolator.LinearPoint(hashMap, (double)Math.Min(i * (double)width / (double)scaleX, width),
+                                                                         (double)Math.Min(k * (double)heigth / (double)scaleY, heigth));
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
                     output.SetPixel(i, k, hue);
-                                                                                #pragma warning restore CA1416 // Validate platform compatibility
+                                                                                #pragma warning restore CA1416 // Validate platform compatibilit
                 }
             }
 
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
-            output.Save("./Outputs/ouput.png", System.Drawing.Imaging.ImageFormat.Png);
+            output.Save($"./Outputs/{fileName}.png", System.Drawing.Imaging.ImageFormat.Png);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
-        }
-        catch (Exception E)
-        {
-            Console.WriteLine(E.Source);
-            Console.WriteLine(E.Message);
-            Console.WriteLine("failed");
-            return false;
-        }
+        //}
+        //catch (Exception E)
+        //{
+        //    Console.WriteLine(E.Source);
+        //    Console.WriteLine(E.Message);
+        //    Console.WriteLine("failed");
+        //    return false;
+        //}
 
         Console.WriteLine("passed");
         return true;
