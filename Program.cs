@@ -1,7 +1,8 @@
 ﻿void main()
 {
-    HashMap<Point> hashMap = new HashMap<Point>();
-    Saver.LinearInterpolationHashMap(hashMap, 1600, 900);
+    HashMap<Point> hashMap = new HashMap<Point>(7, 7);
+    Saver.DrawHashmap<Point>(hashMap, "hashmap");
+    Saver.LinearInterpolationHashMap(hashMap, 10, 10);
 }
 
 main();

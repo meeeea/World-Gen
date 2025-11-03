@@ -11,9 +11,9 @@ class Interpolator
         int py = Math.Min((int)Math.Ceiling(y), hashMap.Height - 1);
 
         double nxd = x % 1;
-        double pxd = x % 1;
+        double pxd = 1- x % 1;
         double nyd = x % 1;
-        double pyd = x % 1;
+        double pyd = 1- x % 1;
 
 
         double nxnyH = (double) hashMap.GetPoint(nx, ny);
@@ -26,10 +26,13 @@ class Interpolator
 
         double pointValue = nxH * nxd + pxH * pxd;
 
+        Console.WriteLine($"start point {x}, {y}");
+        Console.WriteLine($"{nx}, {ny}, {nxnyH}, {nxd}, {nyd}");
+        Console.WriteLine($"{px}, {ny}, {pxnyH}, {pxd}, {nyd}");
+        Console.WriteLine($"{nx}, {py}, {nxpyH}, {nxd}, {pyd}");
+        Console.WriteLine($"{px}, {py}, {pxpyH}, {pxd}, {pyd}\n");
 
-        Console.WriteLine($"{nxnyH}, {nxpyH}, {pxnyH}, {pxpyH}, {pointValue}");
-
-        return new(pointValue);
+        return new(Math.Max(Math.Min(pointValue, 1), 0));
     }
 
     public static Point BicubicPoint(HashMap<Point> hashMap, double x, double y)

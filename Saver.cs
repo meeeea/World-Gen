@@ -45,15 +45,15 @@ class Saver
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
             Bitmap output = new Bitmap(scaleX, scaleY);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
-            int width = hashMap.Width;
-            int heigth = hashMap.Height;
+            int width = hashMap.Width - 1;
+            int heigth = hashMap.Height - 1;
 
             for (int i = 0; i < scaleX; i++)
             {
                 for (int k = 0; k < scaleY; k++)
                 {
-                    Color hue = (Color)Interpolator.LinearPoint(hashMap, (double)Math.Min(i * (double)width / (double)scaleX, width),
-                                                                         (double)Math.Min(k * (double)heigth / (double)scaleY, heigth));
+                    Color hue = (Color)Interpolator.LinearPoint(hashMap, i * (double)width / (double)scaleX,
+                                                                         k * (double)heigth / (double)scaleY);
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
                     output.SetPixel(i, k, hue);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibilit
