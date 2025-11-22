@@ -3,22 +3,53 @@ using System.Drawing;
 class Point: IConvertible
 {
     public int value;
+    public double scale = 1;
+    private int? x;
+    private int? y ;
+
+
+    private int cvalue => Math.Max(Math.Min(value, 255), 0);
     public static implicit operator int(Point point) => point.value;
-    public static implicit operator Color(Point point) => Color.FromArgb(point.value, point.value, point.value);
-    public static implicit operator float(Point point) => (float) point.value / (float) 255;
+    public static implicit operator Color(Point point)
+    {
+        if (point.x is not null && point.y is not null)
+        {
+            return Color.FromArgb((int) point.x, (int) point.y, point.cvalue);
+        }
+        
+        return Color.FromArgb(point.cvalue, point.cvalue, point.cvalue);
+    } 
+    public static implicit operator float(Point point) => ((float) point.value / (float) 255) * (float) point.scale;
     public Point()
     {
         value = Rand.Random(0, 255);
     }
 
+
+
     public Point(double height)
     {
-        value = (int) Math.Floor(255 * height);
+        value = (int)Math.Floor(255 * height);
+        value = cvalue;
+    }
+    
+    public Point(double height, double scale)
+    {
+        value = (int)Math.Floor(255 * height / scale);
+        this.scale = scale;
+        value = cvalue;
     }
 
+    public Point(double height, double X, double Y)
+    {
+        value = (int)Math.Floor(255 * height);
+        value = cvalue;
+        x = (int)Math.Floor(255 * X);
+        y = (int)Math.Floor(255 * Y);
+    }
     public override string ToString()
     {
-        return $"{value}";
+        return $"{(float) this}";
     }
 
 

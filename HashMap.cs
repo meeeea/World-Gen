@@ -33,37 +33,6 @@ class HashMap<T> : IConvertible
     {
         return (Color)Convert.ChangeType(hashmap[x][y], typeof(Color));
     }
-    
-    public List<List<T>>? GetBufferArea(double x, double y, int scale)
-    {
-        int goodX = (int) Math.Ceiling(x);
-        int goodY = (int) Math.Ceiling(y);
-
-        if (x - scale < 0 || x > scaleX - scale - 1 || y - scale < 0 || y > scaleY - scale - 1)
-        {
-            return null;
-        }
-        List<List<T>> values = new();
-        int j = 0;
-        for (int i = goodX - scale; i < goodX + scale; i++)
-        {
-            values.Add(new());
-            j++;
-            for (int k = goodY - scale; k < goodY + scale; k++)
-            {
-                try
-                {
-                    values[j].Add(hashmap[i][k]);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
-
-        return values;
-    }
 
 
 // after here is ICONVERTER stuff and therefor unnecisary

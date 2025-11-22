@@ -34,14 +34,14 @@ class Saver
             return false;
         }
 
-        Console.WriteLine("Passed");
+        Console.WriteLine("Passed (hashmap)");
         return true;
     }
 
     public static bool LinearInterpolationHashMap(HashMap<Point> hashMap, int scaleX, int scaleY, string fileName = "output")
     {
-        //try
-        //{
+        try
+        {
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
             Bitmap output = new Bitmap(scaleX, scaleY);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
@@ -63,18 +63,54 @@ class Saver
                                                                                 #pragma warning disable CA1416 // Validate platform compatibility
             output.Save($"./Outputs/{fileName}.png", System.Drawing.Imaging.ImageFormat.Png);
                                                                                 #pragma warning restore CA1416 // Validate platform compatibility
-        //}
-        //catch (Exception E)
-        //{
-        //    Console.WriteLine(E.Source);
-        //    Console.WriteLine(E.Message);
-        //    Console.WriteLine("failed");
-        //    return false;
-        //}
+        }
+        catch (Exception E)
+        {
+            Console.WriteLine(E.Source);
+            Console.WriteLine(E.Message);
+            Console.WriteLine("failed");
+            return false;
+        }
 
-        Console.WriteLine("passed");
+        Console.WriteLine("passed (linear)");
         return true;
     }
 
+    public static bool SmootherStepInterpolationHashMap(HashMap<Point> hashMap, int scaleX, int scaleY, string fileName = "output", bool printColory = false)
+    {
+        try
+        {
+                                                                                #pragma warning disable CA1416 // Validate platform compatibility
+            Bitmap output = new Bitmap(scaleX, scaleY);
+                                                                                #pragma warning restore CA1416 // Validate platform compatibility
+            int width = hashMap.Width - 1;
+            int heigth = hashMap.Height - 1;
 
+            for (int i = 0; i < scaleX; i++)
+            {
+                for (int k = 0; k < scaleY; k++)
+                {
+                    Color hue = (Color)Interpolator.SmootherStep(hashMap, i * (double)width / (double)scaleX,
+                                                                         k * (double)heigth / (double)scaleY, printColory);
+                                                                                #pragma warning disable CA1416 // Validate platform compatibility
+                    output.SetPixel(i, k, hue);
+                                                                                #pragma warning restore CA1416 // Validate platform compatibilit
+                }
+            }
+
+                                                                                #pragma warning disable CA1416 // Validate platform compatibility
+            output.Save($"./Outputs/{fileName}.png", System.Drawing.Imaging.ImageFormat.Png);
+                                                                                #pragma warning restore CA1416 // Validate platform compatibility
+        }
+        catch (Exception E)
+        {
+            Console.WriteLine(E.Source);
+            Console.WriteLine(E.Message);
+            Console.WriteLine("failed");
+            return false;
+        }
+
+        Console.WriteLine("passed (smoothstep)");
+        return true;
+    }
 }

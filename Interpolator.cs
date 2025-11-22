@@ -4,6 +4,7 @@ class Interpolator
 {
 
     public static Point LinearPoint(HashMap<Point> hashMap, double x, double y)
+    //this function is done and does not need any further editing. if you want to change something look at something else.
     {
         int nx = Math.Max((int)Math.Floor(x), 0);
         int px = Math.Min((int)Math.Ceiling(x), hashMap.Width - 1);
@@ -11,57 +12,82 @@ class Interpolator
         int py = Math.Min((int)Math.Ceiling(y), hashMap.Height - 1);
 
         double nxd = x % 1;
-        double pxd = 1- x % 1;
-        double nyd = x % 1;
-        double pyd = 1- x % 1;
+        double pxd = 1 - x % 1;
+        double nyd = y % 1;
+        double pyd = 1 - y % 1;
 
 
-        double nxnyH = (double) hashMap.GetPoint(nx, ny);
-        double nxpyH = (double) hashMap.GetPoint(nx, py);
-        double pxnyH = (double) hashMap.GetPoint(px, ny);
-        double pxpyH = (double) hashMap.GetPoint(px, py);
+        double nxnyH = (double)hashMap.GetPoint(nx, ny);
+        double nxpyH = (double)hashMap.GetPoint(nx, py);
+        double pxnyH = (double)hashMap.GetPoint(px, ny);
+        double pxpyH = (double)hashMap.GetPoint(px, py);
 
-        double nxH = nxnyH * nyd + nxpyH * pyd;
-        double pxH = pxnyH * nyd + pxpyH * pyd;
+        double nxH = nxnyH * pyd + nxpyH * nyd;
+        double pxH = pxnyH * pyd + pxpyH * nyd;
 
-        double pointValue = nxH * nxd + pxH * pxd;
-
-        Console.WriteLine($"start point {x}, {y}");
-        Console.WriteLine($"{nx}, {ny}, {nxnyH}, {nxd}, {nyd}");
-        Console.WriteLine($"{px}, {ny}, {pxnyH}, {pxd}, {nyd}");
-        Console.WriteLine($"{nx}, {py}, {nxpyH}, {nxd}, {pyd}");
-        Console.WriteLine($"{px}, {py}, {pxpyH}, {pxd}, {pyd}\n");
+        double pointValue = nxH * pxd + pxH * nxd;
 
         return new(Math.Max(Math.Min(pointValue, 1), 0));
     }
 
+    public static Point SmootherStep(HashMap<Point> hashMap, double x, double y, bool printColory = false)
+    {
+        double calculate(double nxd, double LH, double RH) => (6 * Math.Pow(nxd, 5) - 15 * Math.Pow(nxd, 4) + 10 * Math.Pow(nxd, 3)) * (RH - LH) + LH;
+
+        int nx = Math.Max((int)Math.Floor(x), 0);
+        int px = Math.Min((int)Math.Ceiling(x), hashMap.Width - 1);
+        int ny = Math.Max((int)Math.Floor(y), 0);
+        int py = Math.Min((int)Math.Ceiling(y), hashMap.Height - 1);
+
+        double nxd = x % 1;
+        double nyd = y % 1;
+
+        double nxnyH = (double)hashMap.GetPoint(nx, ny);
+        double nxpyH = (double)hashMap.GetPoint(nx, py);
+        double pxnyH = (double)hashMap.GetPoint(px, ny);
+        double pxpyH = (double)hashMap.GetPoint(px, py);
+
+
+        if (nxd < 0 || nxd > 1) { Console.WriteLine(nxd); }
+        if (nyd < 0 || nyd > 1) { Console.WriteLine(nyd); }
+
+        if (nxnyH < 0 || nxnyH > 1) { Console.WriteLine(nxnyH); }
+        if (nxpyH < 0 || nxpyH > 1) { Console.WriteLine(nxpyH); }
+        if (pxnyH < 0 || pxnyH > 1) { Console.WriteLine(pxnyH); }
+        if (pxpyH < 0 || pxpyH > 1) { Console.WriteLine(pxpyH); }
+
+
+
+        double newNY = calculate(nxd, nxnyH, pxnyH);
+
+        double newPY = calculate(nxd, nxpyH, pxpyH);
+        if (newPY < 0 || newPY > 1) { Console.WriteLine($"b: {newPY}"); }
+        if (newNY < 0 || newNY > 1) { Console.WriteLine($"c: {newNY}"); }
+
+
+        double smoothPoint = calculate(nyd, newNY, newPY);
+
+        if (smoothPoint < 0 || smoothPoint > 1) { Console.WriteLine($"s: {smoothPoint}"); }
+
+        if (printColory)
+        {
+            return new(smoothPoint, nxd, nyd);
+
+        }
+        return new(smoothPoint);
+    }
+    
     public static Point BicubicPoint(HashMap<Point> hashMap, double x, double y)
     {
-        double getValue1d(List<Point> p, double x)
-        {
-            return p[1] + 0.5 * x * (p[2] - p[0] + x * (2.0 * p[0] - 5 * p[1] + 4 * p[2] - p[3] + x * (3 * p[1] - p[2] - p[0])));
-        }
-        double getValue2d(List<List<Point>>? p, double x, double y)
-        {
-            if (p is null)
-            {
-                return 0;
-            }
-
-            List<Point> points =
-            [
-                new(getValue1d(p[0], y)),
-                new(getValue1d(p[1], y)),
-                new(getValue1d(p[2], y)),
-                new(getValue1d(p[3], y)),
-            ];
-            return getValue1d(points, x);
-        }
+        
 
 
-        List<List<Point>>? values = hashMap.GetBufferArea(x, y, 2);
-
-        return new(getValue2d(values, x, y));
+        return new();
     }
 
+    class BadInput : Exception
+    {
+        public BadInput(string Message) : base(Message) { }
+    }
 }
+
