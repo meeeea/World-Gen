@@ -36,7 +36,7 @@ class BufferedHashmap : HashMap<Point> {
         if (x > BufferWidth) {
             if (x < Width - bufferWidth) {
                 if (y > bufferWidth) {
-                    if (y < Height - bufferWidth) { // No Buffer Intersection                       
+                    if (y < Height - bufferWidth) { // No Buffer Intersection
                         for (int i = (int) Math.Floor(x) - bufferWidth; i < Math.Ceiling(x) + bufferWidth; i++) {
                             BufferArea.Add(new List<Point>());
 
@@ -101,17 +101,52 @@ class BufferedHashmap : HashMap<Point> {
                     }
                 }
                 else {
-                    if (y < Height - bufferWidth) { // right and top buffer interface
+                    if (y < Height - bufferWidth) { // right and top buffer intersection
                         
                     }
-                    else { // right, top, and bottom buffer interface
+                    else { // right, top, and bottom buffer intersection
                         
                     }
                 }
             }
         }
-        else { // all left buffer intersection
-            
+        else {
+            if (x < Width - bufferWidth) {
+                if (y > bufferWidth) { 
+                    if (y < Height - bufferWidth) { // left buffer intersection
+                        
+                    }
+                    else { // left and bottom buffer intersection
+                        
+                    }
+                }
+                else {
+                    if (y < Height - bufferWidth) { // left and top buffer intersection
+                        
+                    }
+                    else { // left, top, bottom buffer intersection
+                        
+                    }
+                }
+            }
+            else {
+                 if (y > bufferWidth) { 
+                    if (y < Height - bufferWidth) { // left and right buffer intersection
+                        
+                    }
+                    else { // left, right, and bottom buffer intersection
+                        
+                    }
+                }
+                else {
+                    if (y < Height - bufferWidth) { // left, right, and top buffer intersection
+                        
+                    }
+                    else { // all buffer intersection
+                        
+                    }
+                }
+            }
         }
 
 
