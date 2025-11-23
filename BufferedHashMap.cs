@@ -36,9 +36,7 @@ class BufferedHashmap : HashMap<Point> {
         if (x > BufferWidth) {
             if (x < Width - bufferWidth) {
                 if (y > bufferWidth) {
-                    if (y < Height - bufferWidth) { // No Buffer Intersection
-
-                        
+                    if (y < Height - bufferWidth) { // No Buffer Intersection                       
                         for (int i = (int) Math.Floor(x) - bufferWidth; i < Math.Ceiling(x) + bufferWidth; i++) {
                             BufferArea.Add(new List<Point>());
 
@@ -48,8 +46,6 @@ class BufferedHashmap : HashMap<Point> {
                         }
                     }
                     else { // Bottom Buffer Intersection
-
-                        
                         for (int i = (int) Math.Floor(x) - bufferWidth; i < Math.Ceiling(x) + bufferWidth; i++) {
                             BufferArea.Add(new List<Point>());
 
@@ -65,8 +61,6 @@ class BufferedHashmap : HashMap<Point> {
                 }
                 else {
                     if (y < Height - bufferWidth) { // Top Buffer Intersection
-
-                        
                         for (int i = (int) Math.Floor(x) - bufferWidth; i < Math.Ceiling(x) + bufferWidth; i++) {
                             BufferArea.Add(new List<Point>());
 
@@ -80,16 +74,25 @@ class BufferedHashmap : HashMap<Point> {
                         }
                     }
                     else {// Tob and Bottom Buffer Intersection
-                        
+                        for (int i = (int) Math.Floor(x) - bufferWidth; i < Math.Ceiling(x) + bufferWidth; i++) {
+                            BufferArea.Add(new List<Point>());
+                            for (int k = (int) Math.Abs(Math.Floor(y) - bufferWidth); k >= 0; k--) {
+                                BufferArea[i].Add(bufferTop[i + bufferWidth][k]);
+                            }
+                            for (int k = 0; k < Width; k++)
+                            {
+                                BufferArea[i].Add(GetPoint(i, k));
+                            }
+                            for (int k = 0; k < (int) Math.Floor(y) - bufferWidth; k++)
+                            {
+                                BufferArea[i].Add(bufferBottom[i + bufferWidth][k]);
+                            }
+                        }
                     }
                 }
             }
-            else { // all with right buffer intersection:
-                
-
-                if (y > bufferWidth) { // without right and top intersection
-                    
-
+            else {
+                if (y > bufferWidth) { 
                     if (y < Height - bufferWidth) { // right only buffer intersection
                         
                     }
@@ -112,7 +115,7 @@ class BufferedHashmap : HashMap<Point> {
         }
 
 
-        return null;
+        return BufferArea;
     }
 
 }
